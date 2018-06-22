@@ -23,15 +23,29 @@ router.post('/saveCar', function(req, res) {
   })
 });
 
-/* Get car List */
+/* Get User List */
 router.get('/getCarList/:id', function(req, res, next) {
-  car.find({_id: req.params.id}, function(err, results){
+  User.find({_id: req.params.id}, function(err, results){
     if(err){
       res.status(403).json({msg: "Something went wrong  "})
     } else {
-      res.status(200).json({msg: "car fetched saved succesfully", data: results})
+      res.status(200).json({msg: "User fetched saved succesfully", data: results})
     }
   })
 });
+
+
+/* Get User List */
+router.get('/getCarList', function(req, res, next) {
+  User.find({_id: req.params.id}, function(err, results){
+    if(err){
+      res.status(403).json({msg: "Something went wrong  "})
+    } else {
+      res.status(200).json({msg: "User fetched saved succesfully", data: results})
+    }
+  })
+});
+
+
 
 module.exports = router;
