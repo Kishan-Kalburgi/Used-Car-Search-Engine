@@ -14,7 +14,7 @@ var app = express();
 require("./config/database")
 
 // view engine setup
-app.set('views', path.join(__dirname, 'frontend/dist/carSearchEngine'));
+app.set('views', path.join(__dirname, 'fortend/dist/carSearchEngine'));
 app.engine("html", require("ejs").renderFile);
 app.set('view engine', 'html');
 
@@ -23,7 +23,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'frontend/dist/carSearchEngine')));
+app.use(express.static(path.join(__dirname, 'fortend/dist/carSearchEngine')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
