@@ -1,0 +1,146 @@
+<div class="row justify-content-md-center">
+
+  <div class="col-sm-8">
+    <div [ngSwitch]="step">
+      <div *ngSwitchCase="1">
+        <!-- Form step 1 -->
+        <form novalidate (ngSubmit)="onFormNext(search)" #search="ngForm">
+
+          <div style="text-align:center;">
+            <h1>Used Car Search Engine</h1>
+            <p>Please fill in this form</p>
+          </div>
+          <hr>
+
+          <div class="form-group">
+            <label for="make">
+              <b>Make</b>
+            </label>
+            <input type="text" class="form-control" [ngModel]="car.make" name="make" #make="ngModel" id="inputmake" placeholder="Make"
+              required>
+          </div>
+          <!-- make error block -->
+          <div *ngIf="(make.invalid && ( make.touched || make.dirty) ) || isSubmitted" class="col-sm-6 text-danger">
+            <div *ngIf="make.errors?.required">
+              Please enter the make
+            </div>
+          </div>
+
+
+          <!-- Select model block -->
+          <div class="form-group">
+            <label for="model">
+              <b>Model</b>
+            </label>
+            <select id="select" class="form-control" [ngModel]="car.model" name="model" required>
+              <option *ngFor="let m of model" [value]="m"> {{ m }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Year -->
+          <div class="form-group">
+            <label for="year">
+              <b>Year</b>
+            </label>
+            <input type="text" class="form-control" [ngModel]="car.year" name="year" #year="ngModel" id="inputyear" placeholder="year"
+              required>
+          </div>
+          <!-- year error block -->
+          <div *ngIf="(year.invalid && ( year.touched || year.dirty) ) || isSubmitted" class="col-sm-6 text-danger">
+            <div *ngIf="year.errors?.required">
+              Please enter the Year
+            </div>
+          </div>
+
+          <!-- Select status block -->
+          <div class="form-group">
+            <label for="type">
+              <b>Type</b>
+            </label>
+            <br>
+            <div class="form-check form-check-inline">
+              <label>
+                <input type="radio" value="sedan" name="type" [ngModel]="car.type" #type="ngModel" id="inputtype"> sedan
+              </label>
+            </div>
+            <div class="form-check form-check-inline">
+              <label>
+                <input type="radio" value="coupe" name="type" [ngModel]="car.type" #type="ngModel" id="inputtype"> coupe
+              </label>
+            </div>
+          </div>
+
+          <br>
+
+          <div class="clearfix">
+            <button type="submit" class="btn btn-primary" style="float: right;"> Next
+            </button>
+          </div>
+
+        </form>
+      </div>
+      <div *ngSwitchCase="2">
+        <!-- Form step 2 -->
+        <form novalidate (ngSubmit)="onFormSubmit(basic)" #basic="ngForm">
+
+
+          <div style="text-align:center;">
+            <h1>Booking Information</h1>
+            <p>Please fill in this form</p>
+          </div>
+          <hr>
+
+          <!-- Features -->
+          <div class="form-check">
+            <label class="form-check-label" for="features">
+              <b>Select Features</b>
+            </label>
+            <br>
+            <input class="form-check-input" type="checkbox" #features="ngModel" value="gps" id="features" [ngModel]="car.features" id="inputfeatures"
+              name="features" required>
+            GPS
+            <br>
+            <input class="form-check-input" type="checkbox" #features="ngModel" value="security lock" id="features" [ngModel]="car.features"
+              id="inputfeatures" name="features" required>
+            Security Lock
+            <br>
+            <input class="form-check-input" type="checkbox" #features="ngModel" value="cargo mat" id="features" [ngModel]="car.features"
+              id="inputfeatures" name="features" required>
+            Cargo Mat
+          </div>
+          <div *ngIf="(features.invalid && ( features.touched || features.dirty)) || isSubmitted" class="col-sm-6 text-danger">
+            <div *ngIf="features.errors?.required">
+              Please select featurs
+            </div>
+          </div>
+
+          <!-- Select Date of Birth block -->
+          <div class="form-group">
+            <label for="purchaseDate">
+              <b>Purchase Date</b>
+            </label>
+            <input type="date" class="form-control" [ngModel]="car.purchaseDate" name="purchaseDate" #purchaseDate="ngModel" id="inputpurchaseDate"
+              placeholder="Select Purchase Date" required>
+          </div>
+          <!-- purchaseDate error block -->
+          <div *ngIf="(purchaseDate.invalid && ( purchaseDate.touched || purchaseDate.dirty)) || isSubmitted" class="col-sm-6 text-danger">
+            <div *ngIf="purchaseDate.errors?.required">
+              Please enter the Purchase Date
+            </div>
+          </div>
+
+          <br>
+          <!-- <div class="progress form-group col-lg-6">
+                      <div class="progress-bar bg-success col-lg-6" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">50%</div>
+                    </div> -->
+          <div class="clearfix">
+            <button type="submit" class="btn btn-primary" style="float: right;"> Submit
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
