@@ -45,7 +45,7 @@ export class SearchPageComponent implements OnInit {
           console.log(data)
           
           console.log("success")
-          this.router.navigate(['/report/'+ data.id])
+          this.router.navigate(['/result/'+ data.id])
         },
           error => {
             console.log("Error Occured")

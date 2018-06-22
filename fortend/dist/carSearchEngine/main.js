@@ -417,7 +417,7 @@ var SearchPageComponent = /** @class */ (function () {
                 .subscribe(function (data) {
                 console.log(data);
                 console.log("success");
-                _this.router.navigate(['/report/' + data.id]);
+                _this.router.navigate(['/result/' + data.id]);
             }, function (error) {
                 console.log("Error Occured");
             });
