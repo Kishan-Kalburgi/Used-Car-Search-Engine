@@ -14,7 +14,7 @@ var app = express();
 require("./config/database")
 
 // view engine setup
-app.set('views', path.join(__dirname, 'frontend/dist/demo1'));
+app.set('views', path.join(__dirname, 'frontend/dist/carSearchEngine'));
 app.engine("html", require("ejs").renderFile);
 app.set('view engine', 'html');
 
