@@ -5,8 +5,8 @@ var carSchema = new Schema({
   make:  String,
   model: String,
   year:   String,
-  Type: String,
-  Features: String,
+  type: String,
+  features: String,
   purchaseDate: { type: Date, default: Date.now }
 });
 

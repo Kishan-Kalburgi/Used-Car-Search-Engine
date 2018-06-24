@@ -29,7 +29,7 @@ router.get('/getCarList/:id', function(req, res, next) {
     if(err){
       res.status(403).json({msg: "Something went wrong  "})
     } else {
-      res.status(200).json({msg: "Car fetched saved succesfully", data: results})
+      res.status(200).json({msg: "Car fetched record succesfully", data: results})
     }
   })
 });
