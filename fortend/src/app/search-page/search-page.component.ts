@@ -14,6 +14,7 @@ export class SearchPageComponent implements OnInit {
   step: string;
   isSubmitted = false;
   model = ["Civic", "Odyssey", "Pilot", "Accord"]
+  features = []
 
   constructor(private router: Router, private dataService: DataService) { 
     this.car = new Car;
@@ -22,6 +23,15 @@ export class SearchPageComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  addFeatures(item){
+    if(this.features.includes(item)){
+      this.features.splice(this.features.indexOf(item),1)
+    }else{
+      this.features.push(item)
+    }
+    
   }
 
   onFormNext({ value, valid }: { value: Car, valid: boolean }) {
@@ -36,7 +46,8 @@ export class SearchPageComponent implements OnInit {
     // console.log(this.user);
     // console.log('valid: ' + valid);
     if (valid) {
-      this.car.features = value.features;
+      this.car.features = this.features.toString();
+      // this.car.features = value.features;
     this.car.purchaseDate = value.purchaseDate;
       console.log(this.car);
       console.log('valid: ' + valid);      

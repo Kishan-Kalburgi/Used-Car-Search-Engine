@@ -60,15 +60,13 @@
             </label>
             <br>
             <div class="form-check form-check-inline">
-              <label>
-                <input type="radio" value="sedan" name="type" [ngModel]="car.type" #type="ngModel" id="inputtype"> sedan
-              </label>
+              <input class="form-check-input" [(ngModel)]="car.type" type="radio" name="type" id="inlineRadio1" value="Sedan">
+              <label class="form-check-label" for="inlineRadio1">Sedan</label>
             </div>
             <div class="form-check form-check-inline">
-              <label>
-                <input type="radio" value="coupe" name="type" [ngModel]="car.type" #type="ngModel" id="inputtype"> coupe
-              </label>
-            </div>
+              <input class="form-check-input" [(ngModel)]="car.type" type="radio" name="type" id="inlineRadio2" value="Coupe">
+              <label class="form-check-label" for="inlineRadio2">Coupe</label>
+            </div> {{ car.type }}
           </div>
 
           <br>
@@ -97,50 +95,53 @@
               <b>Select Features</b>
             </label>
             <br>
-            <input class="form-check-input" type="checkbox" #features="ngModel" value="gps" id="features" [ngModel]="car.features" id="inputfeatures"
-              name="features" required>
-            GPS
-            <br>
-            <input class="form-check-input" type="checkbox" #features="ngModel" value="security lock" id="features" [ngModel]="car.features"
-              id="inputfeatures" name="features" required>
-            Security Lock
-            <br>
-            <input class="form-check-input" type="checkbox" #features="ngModel" value="cargo mat" id="features" [ngModel]="car.features"
-              id="inputfeatures" name="features" required>
-            Cargo Mat
-          </div>
-          <div *ngIf="(features.invalid && ( features.touched || features.dirty)) || isSubmitted" class="col-sm-6 text-danger">
-            <div *ngIf="features.errors?.required">
-              Please select featurs
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="checkbox" name="features" (change)="addFeatures('GPS')" id="inlineCheckbox1" value="option1">
+              <label class="form-check-label" for="features">GPS</label>
             </div>
-          </div>
-
-          <!-- Select Date of Birth block -->
-          <div class="form-group">
-            <label for="purchaseDate">
-              <b>Purchase Date</b>
-            </label>
-            <input type="date" class="form-control" [ngModel]="car.purchaseDate" name="purchaseDate" #purchaseDate="ngModel" id="inputpurchaseDate"
-              placeholder="Select Purchase Date" required>
-          </div>
-          <!-- purchaseDate error block -->
-          <div *ngIf="(purchaseDate.invalid && ( purchaseDate.touched || purchaseDate.dirty)) || isSubmitted" class="col-sm-6 text-danger">
-            <div *ngIf="purchaseDate.errors?.required">
-              Please enter the Purchase Date
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="checkbox" name="features" (change)="addFeatures('Security Lock')" id="inlineCheckbox2"
+                value="option2">
+              <label class="form-check-label" for="features">Security Lock</label>
             </div>
-          </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="checkbox" name="features" (change)="addFeatures('Cargo Mat')" id="inlineCheckbox3"
+                value="option2">
+              <label class="form-check-label" for="features">Cargo Mat</label>
+            </div>
+            </div>
+            <div *ngIf="(features.invalid && ( features.touched || features.dirty)) || isSubmitted" class="col-sm-6 text-danger">
+              <div *ngIf="features.errors?.required">
+                Please select featurs
+              </div>
+            </div>
 
-          <br>
-          <!-- <div class="progress form-group col-lg-6">
+            <!-- Select Date of Birth block -->
+            <div class="form-group">
+              <label for="purchaseDate">
+                <b>Purchase Date</b>
+              </label>
+              <input type="date" class="form-control" [ngModel]="car.purchaseDate" name="purchaseDate" #purchaseDate="ngModel" id="inputpurchaseDate"
+                placeholder="Select Purchase Date" required>
+            </div>
+            <!-- purchaseDate error block -->
+            <div *ngIf="(purchaseDate.invalid && ( purchaseDate.touched || purchaseDate.dirty)) || isSubmitted" class="col-sm-6 text-danger">
+              <div *ngIf="purchaseDate.errors?.required">
+                Please enter the Purchase Date
+              </div>
+            </div>
+
+            <br>
+            <!-- <div class="progress form-group col-lg-6">
                       <div class="progress-bar bg-success col-lg-6" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">50%</div>
                     </div> -->
-          <div class="clearfix">
-            <button type="submit" class="btn btn-primary" style="float: right;"> Submit
-            </button>
-          </div>
+            <div class="clearfix">
+              <button type="submit" class="btn btn-primary" style="float: right;"> Submit
+              </button>
+            </div>
 
         </form>
+        </div>
       </div>
     </div>
   </div>
-</div>

@@ -1,13 +1,15 @@
 <div class="row justify-content-md-center">
   <div class="col-sm-8">
-    
+
     <div style="text-align:center;">
-        <h1>The User selected the following input</h1>
-        <hr>
-        <p>Here user data will be printed</p>
+      <h1>The User selected the following input</h1>
+      <hr>
+      <h4>
+      {{reportObj?.make + " "+ reportObj?.model + " " + reportObj?.type + " with "+ reportObj?.features+ " "}} on {{ reportObj?.purchaseDate | date : 'dd-MM-yyyy' }}
+      </h4>
+      <h5>The user will get {{purchaseDiscount}}% discount</h5>
     </div>
 
-    {{reportObj | json }}
 
   </div>
 </div>
