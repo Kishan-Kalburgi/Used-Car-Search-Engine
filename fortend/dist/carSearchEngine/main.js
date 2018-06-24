@@ -49,7 +49,7 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 
 var routes = [
     { path: "search", component: _search_page_search_page_component__WEBPACK_IMPORTED_MODULE_2__["SearchPageComponent"] },
-    { path: "result", component: _result_page_result_page_component__WEBPACK_IMPORTED_MODULE_3__["ResultPageComponent"] },
+    { path: "result/:id", component: _result_page_result_page_component__WEBPACK_IMPORTED_MODULE_3__["ResultPageComponent"] },
     { path: "", redirectTo: "/search", pathMatch: "full" }
 ];
 var AppRoutingModule = /** @class */ (function () {
@@ -272,7 +272,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row justify-content-md-center\">\n  <div class=\"col-sm-8\">\n    \n    <div style=\"text-align:center;\">\n        <h1>The User selected the following input</h1>\n        <hr>\n        <p>Here user data will be printed</p>\n    </div>\n\n    {{reportObj | json }}\n\n  </div>\n</div>"
+module.exports = "<div class=\"row justify-content-md-center\">\n  <div class=\"col-sm-8\">\n\n    <div style=\"text-align:center;\">\n      <h1>The User selected the following input</h1>\n      <hr>\n      <h4>\n      {{reportObj?.make + \" \"+ reportObj?.model + \" \" + reportObj?.type + \" with \"+ reportObj?.features+ \" \"}} on {{ reportObj?.purchaseDate | date : 'dd-MM-yyyy' }}\n      </h4>\n      <h5>The user will get {{purchaseDiscount}}% discount</h5>\n    </div>\n\n\n  </div>\n</div>"
 
 /***/ }),
 
@@ -289,6 +289,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 /* harmony import */ var _data_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../data.service */ "./src/app/data.service.ts");
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -301,19 +302,24 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
 var ResultPageComponent = /** @class */ (function () {
-    function ResultPageComponent(route, dataService) {
+    function ResultPageComponent(route, dataService, datePipe) {
         this.route = route;
         this.dataService = dataService;
+        this.datePipe = datePipe;
     }
     ResultPageComponent.prototype.ngOnInit = function () {
         var _this = this;
+        console.log(this.datePipe.transform(new Date(), 'dd'));
         this.route.params.subscribe(function (params) {
             _this.id = params["id"];
             _this.dataService.getUserList(_this.id)
                 .subscribe(function (data) {
                 console.log(data);
-                _this.reportObj = data;
+                _this.reportObj = data.data[0];
+                _this.purchaseDay = _this.datePipe.transform(_this.reportObj.purchaseDate, 'dd');
+                _this.purchaseDiscount = _this.purchaseDay % 2 == 0 ? 40 : 30;
             }, function (err) {
             });
         }, function (err) {
@@ -323,9 +329,10 @@ var ResultPageComponent = /** @class */ (function () {
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'app-result-page',
             template: __webpack_require__(/*! ./result-page.component.html */ "./src/app/result-page/result-page.component.html"),
-            styles: [__webpack_require__(/*! ./result-page.component.css */ "./src/app/result-page/result-page.component.css")]
+            styles: [__webpack_require__(/*! ./result-page.component.css */ "./src/app/result-page/result-page.component.css")],
+            providers: [_angular_common__WEBPACK_IMPORTED_MODULE_3__["DatePipe"]]
         }),
-        __metadata("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_1__["ActivatedRoute"], _data_service__WEBPACK_IMPORTED_MODULE_2__["DataService"]])
+        __metadata("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_1__["ActivatedRoute"], _data_service__WEBPACK_IMPORTED_MODULE_2__["DataService"], _angular_common__WEBPACK_IMPORTED_MODULE_3__["DatePipe"]])
     ], ResultPageComponent);
     return ResultPageComponent;
 }());
@@ -352,7 +359,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row justify-content-md-center\">\n\n  <div class=\"col-sm-8\">\n    <div [ngSwitch]=\"step\">\n      <div *ngSwitchCase=\"1\">\n        <!-- Form step 1 -->\n        <form novalidate (ngSubmit)=\"onFormNext(search)\" #search=\"ngForm\">\n\n          <div style=\"text-align:center;\">\n            <h1>Used Car Search Engine</h1>\n            <p>Please fill in this form</p>\n          </div>\n          <hr>\n\n          <div class=\"form-group\">\n            <label for=\"make\">\n              <b>Make</b>\n            </label>\n            <input type=\"text\" class=\"form-control\" [ngModel]=\"car.make\" name=\"make\" #make=\"ngModel\" id=\"inputmake\" placeholder=\"Make\"\n              required>\n          </div>\n          <!-- make error block -->\n          <div *ngIf=\"(make.invalid && ( make.touched || make.dirty) ) || isSubmitted\" class=\"col-sm-6 text-danger\">\n            <div *ngIf=\"make.errors?.required\">\n              Please enter the make\n            </div>\n          </div>\n\n\n          <!-- Select model block -->\n          <div class=\"form-group\">\n            <label for=\"model\">\n              <b>Model</b>\n            </label>\n            <select id=\"select\" class=\"form-control\" [ngModel]=\"car.model\" name=\"model\" required>\n              <option *ngFor=\"let m of model\" [value]=\"m\"> {{ m }}\n              </option>\n            </select>\n          </div>\n\n          <!-- Year -->\n          <div class=\"form-group\">\n            <label for=\"year\">\n              <b>Year</b>\n            </label>\n            <input type=\"text\" class=\"form-control\" [ngModel]=\"car.year\" name=\"year\" #year=\"ngModel\" id=\"inputyear\" placeholder=\"year\"\n              required>\n          </div>\n          <!-- year error block -->\n          <div *ngIf=\"(year.invalid && ( year.touched || year.dirty) ) || isSubmitted\" class=\"col-sm-6 text-danger\">\n            <div *ngIf=\"year.errors?.required\">\n              Please enter the Year\n            </div>\n          </div>\n\n          <!-- Select status block -->\n          <div class=\"form-group\">\n            <label for=\"type\">\n              <b>Type</b>\n            </label>\n            <br>\n            <div class=\"form-check form-check-inline\">\n              <label>\n                <input type=\"radio\" value=\"sedan\" name=\"type\" [ngModel]=\"car.type\" #type=\"ngModel\" id=\"inputtype\"> sedan\n              </label>\n            </div>\n            <div class=\"form-check form-check-inline\">\n              <label>\n                <input type=\"radio\" value=\"coupe\" name=\"type\" [ngModel]=\"car.type\" #type=\"ngModel\" id=\"inputtype\"> coupe\n              </label>\n            </div>\n          </div>\n\n          <br>\n\n          <div class=\"clearfix\">\n            <button type=\"submit\" class=\"btn btn-primary\" style=\"float: right;\"> Next\n            </button>\n          </div>\n\n        </form>\n      </div>\n      <div *ngSwitchCase=\"2\">\n        <!-- Form step 2 -->\n        <form novalidate (ngSubmit)=\"onFormSubmit(basic)\" #basic=\"ngForm\">\n\n\n          <div style=\"text-align:center;\">\n            <h1>Booking Information</h1>\n            <p>Please fill in this form</p>\n          </div>\n          <hr>\n\n          <!-- Features -->\n          <div class=\"form-check\">\n            <label class=\"form-check-label\" for=\"features\">\n              <b>Select Features</b>\n            </label>\n            <br>\n            <input class=\"form-check-input\" type=\"checkbox\" #features=\"ngModel\" value=\"gps\" id=\"features\" [ngModel]=\"car.features\" id=\"inputfeatures\"\n              name=\"features\" required>\n            GPS\n            <br>\n            <input class=\"form-check-input\" type=\"checkbox\" #features=\"ngModel\" value=\"security lock\" id=\"features\" [ngModel]=\"car.features\"\n              id=\"inputfeatures\" name=\"features\" required>\n            Security Lock\n            <br>\n            <input class=\"form-check-input\" type=\"checkbox\" #features=\"ngModel\" value=\"cargo mat\" id=\"features\" [ngModel]=\"car.features\"\n              id=\"inputfeatures\" name=\"features\" required>\n            Cargo Mat\n          </div>\n          <div *ngIf=\"(features.invalid && ( features.touched || features.dirty)) || isSubmitted\" class=\"col-sm-6 text-danger\">\n            <div *ngIf=\"features.errors?.required\">\n              Please select featurs\n            </div>\n          </div>\n\n          <!-- Select Date of Birth block -->\n          <div class=\"form-group\">\n            <label for=\"purchaseDate\">\n              <b>Purchase Date</b>\n            </label>\n            <input type=\"date\" class=\"form-control\" [ngModel]=\"car.purchaseDate\" name=\"purchaseDate\" #purchaseDate=\"ngModel\" id=\"inputpurchaseDate\"\n              placeholder=\"Select Purchase Date\" required>\n          </div>\n          <!-- purchaseDate error block -->\n          <div *ngIf=\"(purchaseDate.invalid && ( purchaseDate.touched || purchaseDate.dirty)) || isSubmitted\" class=\"col-sm-6 text-danger\">\n            <div *ngIf=\"purchaseDate.errors?.required\">\n              Please enter the Purchase Date\n            </div>\n          </div>\n\n          <br>\n          <!-- <div class=\"progress form-group col-lg-6\">\n                      <div class=\"progress-bar bg-success col-lg-6\" role=\"progressbar\" style=\"width: 50%\" aria-valuenow=\"50\" aria-valuemin=\"0\" aria-valuemax=\"100\">50%</div>\n                    </div> -->\n          <div class=\"clearfix\">\n            <button type=\"submit\" class=\"btn btn-primary\" style=\"float: right;\"> Submit\n            </button>\n          </div>\n\n        </form>\n      </div>\n    </div>\n  </div>\n</div>"
+module.exports = "<div class=\"row justify-content-md-center\">\r\n\r\n  <div class=\"col-sm-8\">\r\n    <div [ngSwitch]=\"step\">\r\n      <div *ngSwitchCase=\"1\">\r\n        <!-- Form step 1 -->\r\n        <form novalidate (ngSubmit)=\"onFormNext(search)\" #search=\"ngForm\">\r\n\r\n          <div style=\"text-align:center;\">\r\n            <h1>Used Car Search Engine</h1>\r\n            <p>Please fill in this form</p>\r\n          </div>\r\n          <hr>\r\n\r\n          <div class=\"form-group\">\r\n            <label for=\"make\">\r\n              <b>Make</b>\r\n            </label>\r\n            <input type=\"text\" class=\"form-control\" [ngModel]=\"car.make\" name=\"make\" #make=\"ngModel\" id=\"inputmake\" placeholder=\"Make\"\r\n              required>\r\n          </div>\r\n          <!-- make error block -->\r\n          <div *ngIf=\"(make.invalid && ( make.touched || make.dirty) ) || isSubmitted\" class=\"col-sm-6 text-danger\">\r\n            <div *ngIf=\"make.errors?.required\">\r\n              Please enter the make\r\n            </div>\r\n          </div>\r\n\r\n\r\n          <!-- Select model block -->\r\n          <div class=\"form-group\">\r\n            <label for=\"model\">\r\n              <b>Model</b>\r\n            </label>\r\n            <select id=\"select\" class=\"form-control\" [ngModel]=\"car.model\" name=\"model\" required>\r\n              <option *ngFor=\"let m of model\" [value]=\"m\"> {{ m }}\r\n              </option>\r\n            </select>\r\n          </div>\r\n\r\n          <!-- Year -->\r\n          <div class=\"form-group\">\r\n            <label for=\"year\">\r\n              <b>Year</b>\r\n            </label>\r\n            <input type=\"text\" class=\"form-control\" [ngModel]=\"car.year\" name=\"year\" #year=\"ngModel\" id=\"inputyear\" placeholder=\"year\"\r\n              required>\r\n          </div>\r\n          <!-- year error block -->\r\n          <div *ngIf=\"(year.invalid && ( year.touched || year.dirty) ) || isSubmitted\" class=\"col-sm-6 text-danger\">\r\n            <div *ngIf=\"year.errors?.required\">\r\n              Please enter the Year\r\n            </div>\r\n          </div>\r\n\r\n          <!-- Select status block -->\r\n          <div class=\"form-group\">\r\n            <label for=\"type\">\r\n              <b>Type</b>\r\n            </label>\r\n            <br>\r\n            <div class=\"form-check form-check-inline\">\r\n              <input class=\"form-check-input\" [(ngModel)]=\"car.type\" type=\"radio\" name=\"type\" id=\"inlineRadio1\" value=\"Sedan\">\r\n              <label class=\"form-check-label\" for=\"inlineRadio1\">Sedan</label>\r\n            </div>\r\n            <div class=\"form-check form-check-inline\">\r\n              <input class=\"form-check-input\" [(ngModel)]=\"car.type\" type=\"radio\" name=\"type\" id=\"inlineRadio2\" value=\"Coupe\">\r\n              <label class=\"form-check-label\" for=\"inlineRadio2\">Coupe</label>\r\n            </div> {{ car.type }}\r\n          </div>\r\n\r\n          <br>\r\n\r\n          <div class=\"clearfix\">\r\n            <button type=\"submit\" class=\"btn btn-primary\" style=\"float: right;\"> Next\r\n            </button>\r\n          </div>\r\n\r\n        </form>\r\n      </div>\r\n      <div *ngSwitchCase=\"2\">\r\n        <!-- Form step 2 -->\r\n        <form novalidate (ngSubmit)=\"onFormSubmit(basic)\" #basic=\"ngForm\">\r\n\r\n\r\n          <div style=\"text-align:center;\">\r\n            <h1>Booking Information</h1>\r\n            <p>Please fill in this form</p>\r\n          </div>\r\n          <hr>\r\n\r\n          <!-- Features -->\r\n          <div class=\"form-check\">\r\n            <label class=\"form-check-label\" for=\"features\">\r\n              <b>Select Features</b>\r\n            </label>\r\n            <br>\r\n            <div class=\"form-check form-check-inline\">\r\n              <input class=\"form-check-input\" type=\"checkbox\" name=\"features\" (change)=\"addFeatures('GPS')\" id=\"inlineCheckbox1\" value=\"option1\">\r\n              <label class=\"form-check-label\" for=\"features\">GPS</label>\r\n            </div>\r\n            <div class=\"form-check form-check-inline\">\r\n              <input class=\"form-check-input\" type=\"checkbox\" name=\"features\" (change)=\"addFeatures('Security Lock')\" id=\"inlineCheckbox2\"\r\n                value=\"option2\">\r\n              <label class=\"form-check-label\" for=\"features\">Security Lock</label>\r\n            </div>\r\n            <div class=\"form-check form-check-inline\">\r\n              <input class=\"form-check-input\" type=\"checkbox\" name=\"features\" (change)=\"addFeatures('Cargo Mat')\" id=\"inlineCheckbox3\"\r\n                value=\"option2\">\r\n              <label class=\"form-check-label\" for=\"features\">Cargo Mat</label>\r\n            </div>\r\n            </div>\r\n            <div *ngIf=\"(features.invalid && ( features.touched || features.dirty)) || isSubmitted\" class=\"col-sm-6 text-danger\">\r\n              <div *ngIf=\"features.errors?.required\">\r\n                Please select featurs\r\n              </div>\r\n            </div>\r\n\r\n            <!-- Select Date of Birth block -->\r\n            <div class=\"form-group\">\r\n              <label for=\"purchaseDate\">\r\n                <b>Purchase Date</b>\r\n              </label>\r\n              <input type=\"date\" class=\"form-control\" [ngModel]=\"car.purchaseDate\" name=\"purchaseDate\" #purchaseDate=\"ngModel\" id=\"inputpurchaseDate\"\r\n                placeholder=\"Select Purchase Date\" required>\r\n            </div>\r\n            <!-- purchaseDate error block -->\r\n            <div *ngIf=\"(purchaseDate.invalid && ( purchaseDate.touched || purchaseDate.dirty)) || isSubmitted\" class=\"col-sm-6 text-danger\">\r\n              <div *ngIf=\"purchaseDate.errors?.required\">\r\n                Please enter the Purchase Date\r\n              </div>\r\n            </div>\r\n\r\n            <br>\r\n            <!-- <div class=\"progress form-group col-lg-6\">\r\n                      <div class=\"progress-bar bg-success col-lg-6\" role=\"progressbar\" style=\"width: 50%\" aria-valuenow=\"50\" aria-valuemin=\"0\" aria-valuemax=\"100\">50%</div>\r\n                    </div> -->\r\n            <div class=\"clearfix\">\r\n              <button type=\"submit\" class=\"btn btn-primary\" style=\"float: right;\"> Submit\r\n              </button>\r\n            </div>\r\n\r\n        </form>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>"
 
 /***/ }),
 
@@ -389,11 +396,20 @@ var SearchPageComponent = /** @class */ (function () {
         this.dataService = dataService;
         this.isSubmitted = false;
         this.model = ["Civic", "Odyssey", "Pilot", "Accord"];
+        this.features = [];
         this.car = new _model_car__WEBPACK_IMPORTED_MODULE_1__["Car"];
         this.car.model = this.model[0];
         this.step = "1";
     }
     SearchPageComponent.prototype.ngOnInit = function () {
+    };
+    SearchPageComponent.prototype.addFeatures = function (item) {
+        if (this.features.includes(item)) {
+            this.features.splice(this.features.indexOf(item), 1);
+        }
+        else {
+            this.features.push(item);
+        }
     };
     SearchPageComponent.prototype.onFormNext = function (_a) {
         var value = _a.value, valid = _a.valid;
@@ -409,7 +425,8 @@ var SearchPageComponent = /** @class */ (function () {
         // console.log(this.user);
         // console.log('valid: ' + valid);
         if (valid) {
-            this.car.features = value.features;
+            this.car.features = this.features.toString();
+            // this.car.features = value.features;
             this.car.purchaseDate = value.purchaseDate;
             console.log(this.car);
             console.log('valid: ' + valid);
